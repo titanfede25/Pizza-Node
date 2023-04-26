@@ -37,8 +37,8 @@ app.post('/', async(req, res)=>{
     pizza.LibreGluten   = req.body.LibreGluten;
     pizza.Importe       = req.body.Importe;
     pizza.Descripcion   = req.body.Descripcion;
-    const creado      = await create(pizza);
-    res.status(200).send(creado);
+    const creado        = await create(pizza);
+    res.status(201).send(creado);
 })
 
 app.listen (port, ()=>{
