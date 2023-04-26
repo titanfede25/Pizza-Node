@@ -7,8 +7,15 @@ const port = 3001;
 app.use(express.json());
 
 app.get ('/:id', async(req, res)=>{
-    const id            = await getById(req.params.id);
-    res.status(200).send(id);
+    let status = 200;
+    if(req.params.id < 0){
+        status = 400;
+    }
+    const object            = await getById(req.params.id);
+    if(object==null){
+        status = 404;
+    }
+    res.status(status).send(object);
 })
 
 app.get ('/', async(req, res)=>{
@@ -17,11 +24,22 @@ app.get ('/', async(req, res)=>{
 })
 
 app.delete ('/:id', async(req, res)=>{
+    let status = 200;
+    if(req.params.id < 0){
+        status = 400;
+    }
     const idBorrado     = await deleteById(req.params.id);
-    res.status(200).send(idBorrado);
+    if(idBorrado==null){
+        status = 404;
+    }
+    res.status(status).send(idBorrado);
 })
 
 app.put ('/:id', async(req, res)=>{
+    let status = 200;
+    if(req.params.id < 0){
+        status = 400;
+    }
     const id            = req.params.id;
     const pizza         = new Pizza();
     pizza.Nombre        = req.body.Nombre;
@@ -29,16 +47,23 @@ app.put ('/:id', async(req, res)=>{
     pizza.Importe       = req.body.Importe;
     pizza.Descripcion   = req.body.Descripcion;
     const cambiado      = await update(pizza, id);
-    res.status(200).send(cambiado);
+    if(cambiado==null){
+        status = 404;
+    }
+    res.status(status).send(cambiado);
 })
 app.post('/', async(req, res)=>{
+    let status = 201;
     const pizza         = new Pizza();
     pizza.Nombre        = req.body.Nombre;
     pizza.LibreGluten   = req.body.LibreGluten;
     pizza.Importe       = req.body.Importe;
     pizza.Descripcion   = req.body.Descripcion;
     const creado        = await create(pizza);
-    res.status(201).send(creado);
+    if(creado==null){
+        status = 400;
+    }
+    res.status(status).send(creado);
 })
 
 app.listen (port, ()=>{
