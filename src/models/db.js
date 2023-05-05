@@ -1,8 +1,12 @@
+import 'dotenv/config'
+
+console.log(process.env.SERVER)
+
 const config = {
-    user: 'Pizzas',
-    password: 'Pizzas',
-    server: 'A-PHZ2-CEO-006',
-    database: 'DAI-Pizzas',
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    server: process.env.SERVER,
+    database: process.env.DATABASE,
     options: {
         trustServerCertificate: true,
         trustedConnection: true,

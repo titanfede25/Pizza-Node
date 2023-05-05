@@ -1,12 +1,9 @@
-import {getAll,getById,create,update,deleteById} from './services/pizzaService.js';
-import Pizza from './models/pizza.js'; 
-import express from "express";
+import { Router } from 'express';
+import Pizza from '../models/pizza.js'; 
+import {getAll,getById,create,update,deleteById} from '../services/pizzaService.js';
 
-const app = express();
-const port = 3001;
-app.use(express.json());
-
-app.get ('/:id', async(req, res)=>{
+const router = Router();
+router.get ('/:id', async(req, res)=>{
     let status = 200;
     if(req.params.id < 0){
         status = 400;
@@ -18,24 +15,21 @@ app.get ('/:id', async(req, res)=>{
     res.status(status).send(object);
 })
 
-app.get ('/', async(req, res)=>{
+router.get ('/', async(req, res)=>{
     const pizzas        = await getAll();
     res.status(200).send(pizzas);
 })
 
-app.delete ('/:id', async(req, res)=>{
+router.delete ('/:id', async(req, res)=>{
     let status = 200;
     if(req.params.id < 0){
         status = 400;
     }
     const idBorrado     = await deleteById(req.params.id);
-    if(idBorrado==null){
-        status = 404;
-    }
     res.status(status).send(idBorrado);
 })
 
-app.put ('/:id', async(req, res)=>{
+router.put ('/:id', async(req, res)=>{
     let status = 200;
     if(req.params.id < 0){
         status = 400;
@@ -52,7 +46,7 @@ app.put ('/:id', async(req, res)=>{
     }
     res.status(status).send(cambiado);
 })
-app.post('/', async(req, res)=>{
+router.post('/', async(req, res)=>{
     let status = 201;
     const pizza         = new Pizza();
     pizza.Nombre        = req.body.Nombre;
@@ -65,8 +59,4 @@ app.post('/', async(req, res)=>{
     }
     res.status(status).send(creado);
 })
-
-app.listen (port, ()=>{
-    console.log(`EJEMPLO ${port}`)
-})
-
+export default router;
